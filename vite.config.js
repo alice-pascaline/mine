@@ -12,11 +12,4 @@ export default defineConfig({
       },
     },
   },
-  build: {
-    outDir: 'dist',
-    sourcemap: true,
-  },
-  define: {
-    'process.env': process.env
-  }
 })

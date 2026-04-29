@@ -20,6 +20,14 @@ const Contact = () => {
     setIsSubmitting(true)
     setError('')
     
+    // Handle frontend-only deployment
+    if (import.meta.env.MODE === 'production' && !import.meta.env.VITE_API_URL) {
+      toast.success('Thank you for your message! Please contact me directly via email.')
+      reset()
+      setIsSubmitting(false)
+      return
+    }
+    
     console.log('Form submitted with data:', data)
     console.log('Current form state:', { name: watch('name'), email: watch('email'), subject: watch('subject'), message: watch('message') })
     
@@ -32,6 +40,12 @@ const Contact = () => {
       }
     } catch (error) {
       console.error('Contact form error:', error)
+      
+      if (error.message === 'API not available') {
+        toast.success('Thank you for your message! Please contact me directly via email.')
+        reset()
+        return
+      }
       
       if (error.response?.data?.message) {
         toast.error(error.response.data.message)
